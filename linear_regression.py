@@ -17,13 +17,8 @@ def closed_form(X, Y, lambda_factor):
     """
     # YOUR CODE HERE
     identity = np.identity(X.shape[1])
-    a = np.matmul(np.transpose(X), X)
-    b = lambda_factor * identity
-    z = a + b
-    c = np.linalg.inv(z)
-    d = np.matmul(c, np.transpose(X))
-    e = np.matmul(d, Y)
-    return e
+    return np.matmul(np.matmul(np.linalg.inv(np.matmul(np.transpose(X), X) + (lambda_factor * identity)), np.transpose(X)), Y)
+    
 
 ### Functions which are already complete, for you to use ###
 
