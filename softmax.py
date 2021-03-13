@@ -54,7 +54,20 @@ def compute_cost_function(X, Y, theta, lambda_factor, temp_parameter):
         c - the cost value (scalar)
     """
     #YOUR CODE HERE
-    raise NotImplementedError
+    n = X.shape[0]
+    k = theta.shape[0]
+    log = np.log(compute_probabilities(X, theta, temp_parameter))
+
+    obj = 0
+
+    for i in range(n):
+        for j in range(k):
+            if (Y[i] == j):
+                obj += log[j, i]
+
+    reg = (lambda_factor / 2) * np.sum(np.square(theta))
+
+    return -obj/n + reg
 
 def run_gradient_descent_iteration(X, Y, theta, alpha, lambda_factor, temp_parameter):
     """
@@ -74,7 +87,19 @@ def run_gradient_descent_iteration(X, Y, theta, alpha, lambda_factor, temp_param
         theta - (k, d) NumPy array that is the final value of parameters theta
     """
     #YOUR CODE HERE
-    raise NotImplementedError
+    n = X.shape[0]
+    k = theta.shape[0]
+
+    M = sparse.coo_matrix(([1]*n, (Y, range(n))), shape=(k,n)).toarray()
+    P = compute_probabilities(X, theta, temp_parameter)
+
+    obj = np.matmul(M - P, X)
+
+    J = (- 1 / (n * temp_parameter)) * obj + lambda_factor*theta
+
+    return theta - alpha * J
+
+    
 
 def update_y(train_y, test_y):
     """
@@ -94,7 +119,10 @@ def update_y(train_y, test_y):
                     for each datapoint in the test set
     """
     #YOUR CODE HERE
-    raise NotImplementedError
+    train_y_mod3 = train_y % 3
+    test_y_mod3 = test_y % 3
+
+    return (train_y_mod3, test_y_mod3)
 
 def compute_test_error_mod3(X, Y, theta, temp_parameter):
     """
