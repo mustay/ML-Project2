@@ -140,7 +140,11 @@ def compute_test_error_mod3(X, Y, theta, temp_parameter):
         test_error - the error rate of the classifier (scalar)
     """
     #YOUR CODE HERE
-    raise NotImplementedError
+    clf = get_classification(X, theta, temp_parameter)
+
+    compute = clf % 3 == Y % 3
+
+    return 1 - np.mean(compute)
 
 def softmax_regression(X, Y, temp_parameter, alpha, lambda_factor, k, num_iterations):
     """
